@@ -38,9 +38,9 @@
 
         .header-logo {
             display: block;
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 8px;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 10px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid var(--gold);
@@ -48,11 +48,11 @@
         }
 
         .header .subtitle {
-            font-size: 1rem;
+            font-size: 1.3rem;
             color: var(--text-muted);
             font-weight: 600;
             margin-bottom: 8px;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .live-indicator {
@@ -470,7 +470,7 @@
         .score-pts { color: var(--gold); font-weight: 800; font-size: 1.2rem; }
 
         @media (max-width: 768px) {
-            .header-logo { width: 80px; height: 80px; }
+            .header-logo { width: 110px; height: 110px; }
             .leader-name { font-size: 1.6rem; }
             .leader-card { padding: 15px; }
             table { font-size: 0.8rem; }
@@ -811,24 +811,26 @@
                 const bottomTeam = m[4];
                 const bottomSeed = m[5];
                 const winner = m[6];
+                const isLive = liveGames[i] || false;
 
-                if (!winner || winner === '') continue;
-                if (region === 'F' && (topTeam === null || bottomTeam === null)) continue;
+                // Include game if it has a winner OR if it's live in progress
+                const hasWinner = winner && winner !== '';
+                if (!hasWinner && !isLive) continue;
+                if (!topTeam || !bottomTeam) continue;
 
                 const detail = GAME_DETAILS[i] || [0, 0];
-                const isLive = liveGames[i] || false;
                 let topScore = 0, bottomScore = 0;
                 if (Array.isArray(detail) && detail.length >= 2) {
                     topScore = detail[0];
                     bottomScore = detail[1];
                 }
 
-                const upset = winner === bottomTeam && bottomSeed > topSeed;
+                const upset = hasWinner && winner === bottomTeam && bottomSeed > topSeed;
                 const dateStr = (Array.isArray(detail) && detail.length >= 3 && detail[2]) ? detail[2] : null;
 
                 regions[region].push({
                     idx: i, round, topTeam, topSeed, bottomTeam, bottomSeed,
-                    winner, upset, topScore, bottomScore, date: dateStr, live: isLive
+                    winner: hasWinner ? winner : '', upset, topScore, bottomScore, date: dateStr, live: isLive
                 });
             }
 
@@ -871,16 +873,21 @@
 
                     const topName = TEAM_NAMES[g.topTeam] || g.topTeam;
                     const botName = TEAM_NAMES[g.bottomTeam] || g.bottomTeam;
-                    const topWin = g.winner === g.topTeam;
-                    const botWin = g.winner === g.bottomTeam;
+                    const hasWinner = g.winner && g.winner !== '';
+                    const topWin = hasWinner && g.winner === g.topTeam;
+                    const botWin = hasWinner && g.winner === g.bottomTeam;
+
+                    // For live games with no winner, both teams show in normal text color
+                    const topClass = hasWinner ? (topWin ? 'gw' : 'gl') : '';
+                    const botClass = hasWinner ? (botWin ? 'gw' : 'gl') : '';
 
                     html += '<div class="game-row">';
 
-                    // Left team (top) — seed in parens, then name, then inline UPSET badge if loser
+                    // Left team (top) — seed in parens, then name, then inline badges
                     html += '<div class="gt-left">';
                     html += '<span class="gt-seed">(' + (g.topSeed || '') + ')</span>';
-                    html += '<span class="gt-name ' + (topWin ? 'gw' : 'gl') + '">' + topName + '</span>';
-                    if (!topWin && g.upset) html += ' <span class="upset-badge">UPSET</span>';
+                    html += '<span class="gt-name ' + topClass + '">' + topName + '</span>';
+                    if (hasWinner && !topWin && g.upset) html += ' <span class="upset-badge">UPSET</span>';
                     if (g.live) html += ' <span class="live-badge">LIVE</span>';
                     html += '</div>';
 
@@ -895,7 +902,7 @@
 
                     // Right team (bottom) — name, then seed in parens
                     html += '<div class="gt-right">';
-                    html += '<span class="gt-name ' + (botWin ? 'gw' : 'gl') + '">' + botName + '</span>';
+                    html += '<span class="gt-name ' + botClass + '">' + botName + '</span>';
                     html += '<span class="gt-seed">(' + (g.bottomSeed || '') + ')</span>';
                     html += '</div>';
 
