@@ -27,32 +27,57 @@
         }
 
         .header {
-            background: linear-gradient(180deg, #141822 0%, var(--bg) 100%);
-            border-bottom: 1px solid var(--card-border);
-            padding: 20px;
-            text-align: center;
+            background: #1a2235;
+            border-bottom: 1px solid #2a3550;
+            padding: 12px 20px;
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
+        .header-ribbon {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-center {
+            flex: 1;
+            text-align: center;
+            padding: 0 20px;
+        }
+
         .header-logo {
             display: block;
-            width: 140px;
-            height: 140px;
-            margin: 0 auto 10px;
+            width: 210px;
+            height: 210px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid var(--gold);
             box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2);
+            flex-shrink: 0;
         }
 
-        .header .subtitle {
-            font-size: 1.3rem;
-            color: var(--text-muted);
-            font-weight: 600;
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-right img {
+            width: 180px;
+            height: auto;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .header-subtitle {
+            font-size: 2rem;
+            color: var(--text);
+            font-weight: 700;
             margin-bottom: 8px;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
 
         .live-indicator {
@@ -79,7 +104,8 @@
         #last-updated {
             font-size: 0.8rem;
             color: var(--text-muted);
-            margin-bottom: 8px;
+            text-align: center;
+            padding: 20px 0 0;
         }
 
         #tournament-progress {
@@ -91,13 +117,10 @@
         }
 
         .round-pill {
-            background: #2a3040;
-            border: 1px solid #3a4050;
-            color: var(--text-muted);
             padding: 6px 14px;
             border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 700;
+            font-size: 0.75rem;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -105,19 +128,17 @@
         .round-pill.completed {
             background: var(--green);
             color: #fff;
-            border-color: var(--green);
         }
 
         .round-pill.active {
-            background: #e85d4a;
+            background: #ff8c00;
             color: #fff;
-            border-color: #e85d4a;
+            animation: pulse 2s infinite;
         }
 
         .round-pill.upcoming {
-            background: #2a3040;
+            background: var(--card-border);
             color: var(--text-muted);
-            border-color: #3a4050;
         }
 
         .container {
@@ -165,7 +186,7 @@
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            50% { opacity: 0.7; }
         }
 
         /* Leader Card */
@@ -470,7 +491,10 @@
         .score-pts { color: var(--gold); font-weight: 800; font-size: 1.2rem; }
 
         @media (max-width: 768px) {
-            .header-logo { width: 110px; height: 110px; }
+            .header-logo { width: 140px; height: 140px; }
+            .header-right img { width: 120px; }
+            .header-ribbon { gap: 12px; }
+            .header-subtitle { font-size: 1.5rem; }
             .leader-name { font-size: 1.6rem; }
             .leader-card { padding: 15px; }
             table { font-size: 0.8rem; }
@@ -482,7 +506,7 @@
         }
 
         @media (max-width: 480px) {
-            .header .subtitle { font-size: 0.9rem; }
+            .header-subtitle { font-size: 1.3rem; }
             .leader-name { font-size: 1.3rem; gap: 8px; }
             .leader-crown { font-size: 1.8rem; }
             .standings-card { padding: 10px; }
@@ -494,14 +518,20 @@
 </head>
 <body>
     <div class="header">
-        <img class="header-logo" src="logo.png" alt="Early Birds Logo">
-        <div class="subtitle">March Madness 2026</div>
-        <div class="live-indicator" id="live-indicator">
-            <div class="live-dot"></div>
-            <span>LIVE</span>
+        <div class="header-ribbon">
+            <img class="header-logo" src="logo.png" alt="Early Birds Logo">
+            <div class="header-center">
+                <div class="header-subtitle">March Madness 2026</div>
+                <div class="live-indicator" id="live-indicator">
+                    <div class="live-dot"></div>
+                    <span>LIVE</span>
+                </div>
+                <div id="tournament-progress"></div>
+            </div>
+            <div class="header-right">
+                <img src="final-four-logo.svg" alt="Final Four Logo">
+            </div>
         </div>
-        <div id="last-updated"></div>
-        <div id="tournament-progress"></div>
     </div>
 
     <div class="container">
@@ -568,6 +598,8 @@
             </div>
         </div>
     </div>
+
+    <div id="last-updated"></div>
 
     <script>
         // ============== DATA ==============
