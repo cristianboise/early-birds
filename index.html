@@ -573,7 +573,7 @@
         // ============== DATA ==============
         const MATCHUPS = [
             [2,"E","DUKE",1,"SIENA",16,"DUKE",8],[2,"E","OHIOST",8,"TCU",9,"TCU",8],[2,"E","STJOHN",5,"NIOWA",12,"STJOHN",9],[2,"E","KANSAS",4,"CALBPTST",13,"KANSAS",9],[2,"E","LVILLE",6,"SFLA",11,"LVILLE",10],[2,"E","MICHST",3,"NDAKST",14,"MICHST",10],[2,"E","UCLA",7,"UCF",10,"UCLA",11],[2,"E","UCONN",2,"FURMAN",15,"UCONN",11],
-            [3,"E","DUKE",1,"TCU",9,"DUKE",12],[3,"E","STJOHN",5,"KANSAS",4,"",12],[3,"E","LVILLE",6,"MICHST",3,"MICHST",13],[3,"E","UCLA",7,"UCONN",2,"UCONN",13],
+            [3,"E","DUKE",1,"TCU",9,"DUKE",12],[3,"E","STJOHN",5,"KANSAS",4,"",12],[3,"E","LVILLE",6,"MICHST",3,"MICHST",13],[3,"E","UCLA",7,"UCONN",2,"",13],
             [4,"E","DUKE",1,null,null,"",14],[4,"E","MICHST",3,null,null,"",14],[5,"E",null,null,null,null,"",60],
             [2,"S","FLA",1,"PVAM",16,"FLA",23],[2,"S","CLEM",8,"IOWA",9,"IOWA",23],[2,"S","VANDY",5,"MCNSE",12,"VANDY",24],[2,"S","NEB",4,"TROY",13,"NEB",24],[2,"S","UNC",6,"VCU",11,"VCU",25],[2,"S","ILL",3,"PENN",14,"ILL",25],[2,"S","MARYCA",7,"TEXAM",10,"TEXAM",26],[2,"S","HOU",2,"IDAHO",15,"HOU",26],
             [3,"S","FLA",1,"IOWA",9,"",27],[3,"S","VANDY",5,"NEB",4,"",27],[3,"S","VCU",11,"ILL",3,"",28],[3,"S","TEXAM",10,"HOU",2,"",28],
@@ -587,7 +587,7 @@
             [6,"F",null,null,null,null,"",62],[6,"F",null,null,null,null,"",62],[7,"F",null,null,null,null,"",-1]
         ];
 
-        const GAME_DETAILS = {0:[71,65,"3/19"],1:[64,66,"3/19"],2:[79,53,"3/20"],3:[68,60,"3/20"],4:[83,79,"3/19"],5:[92,67,"3/19"],6:[75,71,"3/20"],7:[82,71,"3/20"],8:[81,58,"3/21"],10:[69,77,"3/21"],11:[67,72,"3/21"],15:[114,55,"3/20"],16:[61,67,"3/20"],17:[78,68,"3/19"],18:[76,47,"3/19"],19:[78,82,"3/19"],20:[105,70,"3/19"],21:[50,63,"3/19"],22:[78,47,"3/19"],30:[92,58,"3/20"],31:[76,86,"3/20"],32:[82,83,"3/19"],33:[97,78,"3/19"],34:[71,79,"3/19"],35:[73,64,"3/19"],36:[80,66,"3/20"],37:[104,71,"3/20"],45:[101,80,"3/20"],46:[77,102,"3/20"],47:[91,71,"3/20"],48:[90,70,"3/20"],49:[78,56,"3/20"],50:[82,73,"3/20"],51:[89,84,"3/20"],52:[108,74,"3/20"],53:[95,72,"3/21"]};
+        const GAME_DETAILS = {0:[71,65,"3/19"],1:[64,66,"3/19"],2:[79,53,"3/20"],3:[68,60,"3/20"],4:[83,79,"3/19"],5:[92,67,"3/19"],6:[75,71,"3/20"],7:[82,71,"3/20"],8:[81,58,"3/21"],10:[69,77,"3/21"],15:[114,55,"3/20"],16:[61,67,"3/20"],17:[78,68,"3/19"],18:[76,47,"3/19"],19:[78,82,"3/19"],20:[105,70,"3/19"],21:[50,63,"3/19"],22:[78,47,"3/19"],30:[92,58,"3/20"],31:[76,86,"3/20"],32:[82,83,"3/19"],33:[97,78,"3/19"],34:[71,79,"3/19"],35:[73,64,"3/19"],36:[80,66,"3/20"],37:[104,71,"3/20"],45:[101,80,"3/20"],46:[77,102,"3/20"],47:[91,71,"3/20"],48:[90,70,"3/20"],49:[78,56,"3/20"],50:[82,73,"3/20"],51:[89,84,"3/20"],52:[108,74,"3/20"],53:[95,72,"3/21"]};
 
         const PICKS = {
             "Cristian Boise":["DUKE","OHIOST","STJOHN","KANSAS","LVILLE","MICHST","UCLA","UCONN","DUKE","STJOHN","MICHST","UCONN","DUKE","UCONN","DUKE","FLA","IOWA","VANDY","NEB","VCU","ILL","TEXAM","HOU","FLA","VANDY","ILL","HOU","FLA","HOU","HOU","ARIZ","NOVA","WISC","ARK","BYU","GONZAG","MIAMI","PURDUE","ARIZ","ARK","GONZAG","PURDUE","ARIZ","PURDUE","ARIZ","MICH","STLOU","TXTECH","BAMA","TENN","UVA","UK","IOWAST","MICH","BAMA","UVA","IOWAST","MICH","IOWAST","MICH","HOU","ARIZ","ARIZ"],
@@ -620,15 +620,12 @@
             if (nextIdx < 0 || nextIdx >= MATCHUPS.length) return;
 
             const next = MATCHUPS[nextIdx];
-            // Find winner's seed
             const winnerSeed = (m[2] === winner) ? m[3] : m[5];
 
-            // Determine if this feeds into slot 2 (top) or 4 (bottom) of the next matchup
-            // Even source indices go to top, odd go to bottom
-            if (next[2] === null || next[2] === '') {
+            if (idx % 2 === 0) {
                 next[2] = winner;
                 next[3] = winnerSeed;
-            } else if (next[4] === null || next[4] === '') {
+            } else {
                 next[4] = winner;
                 next[5] = winnerSeed;
             }
@@ -661,26 +658,23 @@
                         const idx = findMatchupIdx(awayCode, homeCode);
                         if (idx === null) continue;
 
+                        const topCode = MATCHUPS[idx][2];
+                        const topScore = topCode === awayCode ? parseInt(away.score) : parseInt(home.score);
+                        const bottomScore = topCode === awayCode ? parseInt(home.score) : parseInt(away.score);
+                        const dateLabel = dateStr.substring(4,6) + '/' + dateStr.substring(6);
+
                         if (statusName === 'STATUS_IN_PROGRESS' || statusName === 'STATUS_END_PERIOD') {
-                            liveGames[idx] = true;
-                            GAME_DETAILS[idx] = [parseInt(home.score), parseInt(away.score), dateStr.substring(4,6) + '/' + dateStr.substring(6)];
+                            liveGames[idx] = evt.status.type.shortDetail || 'Live';
+                            GAME_DETAILS[idx] = [topScore, bottomScore, dateLabel];
                         } else if (statusName === 'STATUS_FINAL') {
-                            const homeScore = parseInt(home.score);
-                            const awayScore = parseInt(away.score);
-                            const winnerCode = homeScore > awayScore ? homeCode : awayCode;
+                            const winnerCode = topScore > bottomScore ? topCode : MATCHUPS[idx][4];
 
                             if (!MATCHUPS[idx][6] || MATCHUPS[idx][6] === '') {
                                 MATCHUPS[idx][6] = winnerCode;
-                                // Set winner seed
-                                if (MATCHUPS[idx][2] === winnerCode) {
-                                    // winner is top team, seed already correct
-                                } else {
-                                    // winner is bottom team, seed already correct
-                                }
                                 advanceWinner(idx);
                             }
 
-                            GAME_DETAILS[idx] = [homeScore, awayScore, dateStr.substring(4,6) + '/' + dateStr.substring(6)];
+                            GAME_DETAILS[idx] = [topScore, bottomScore, dateLabel];
                             liveGames[idx] = false;
                         }
                     }
@@ -898,6 +892,7 @@
                     } else {
                         html += '<span class="score-dash">vs</span>';
                     }
+                    if (g.live) html += '<div style="font-size:0.7rem;color:var(--text-muted);text-align:center;margin-top:2px">' + g.live + '</div>';
                     html += '</div>';
 
                     // Right team (bottom) — name, then seed in parens
@@ -992,7 +987,7 @@
         }
 
         function updateLiveIndicator() {
-            const liveCount = Object.values(liveGames).filter(v => v === true).length;
+            const liveCount = Object.values(liveGames).filter(v => !!v).length;
             const indicator = document.getElementById('live-indicator');
             if (liveCount > 0) {
                 indicator.classList.add('visible');
