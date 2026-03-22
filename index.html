@@ -27,7 +27,7 @@
         }
 
         .header {
-            background: #1a2235;
+            background: #2d3a52;
             border-bottom: 1px solid #2a3550;
             padding: 12px 20px;
             position: sticky;
@@ -38,38 +38,43 @@
         .header-ribbon {
             display: flex;
             align-items: center;
-            justify-content: space-between;
             max-width: 1200px;
             margin: 0 auto;
+            gap: 16px;
         }
 
-        .header-center {
-            flex: 1;
-            text-align: center;
-            padding: 0 20px;
+        .header-logo-wrap {
+            flex-shrink: 0;
+            position: relative;
+            width: 140px;
+            height: 140px;
         }
 
-        .header-logo {
-            display: block;
-            width: 210px;
-            height: 210px;
+        .header-logo-wrap img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: opacity 0.3s ease;
+        }
+
+        .header-logo-wrap .logo-eb {
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid var(--gold);
             box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2);
-            flex-shrink: 0;
         }
 
-        .header-right {
-            display: flex;
-            align-items: center;
-        }
+        .header-logo-wrap .logo-ff { opacity: 0; }
+        .header-logo-wrap.show-ff .logo-eb { opacity: 0; }
+        .header-logo-wrap.show-ff .logo-ff { opacity: 1; }
 
-        .header-right img {
-            width: 180px;
-            height: auto;
-            object-fit: contain;
-            flex-shrink: 0;
+        .header-center {
+            flex: 1;
+            text-align: center;
+            min-width: 0;
         }
 
         .header-subtitle {
@@ -491,9 +496,7 @@
         .score-pts { color: var(--gold); font-weight: 800; font-size: 1.2rem; }
 
         @media (max-width: 768px) {
-            .header-logo { width: 140px; height: 140px; }
-            .header-right img { width: 120px; }
-            .header-ribbon { gap: 12px; }
+            .header-logo-wrap { width: 110px; height: 110px; }
             .header-subtitle { font-size: 1.5rem; }
             .leader-name { font-size: 1.6rem; }
             .leader-card { padding: 15px; }
@@ -506,7 +509,10 @@
         }
 
         @media (max-width: 480px) {
-            .header-subtitle { font-size: 1.3rem; }
+            .header-logo-wrap { width: 80px; height: 80px; }
+            .header-subtitle { font-size: 1.1rem; }
+            .header { padding: 8px 12px; }
+            .round-pill { padding: 4px 10px; font-size: 0.65rem; }
             .leader-name { font-size: 1.3rem; gap: 8px; }
             .leader-crown { font-size: 1.8rem; }
             .standings-card { padding: 10px; }
@@ -519,7 +525,10 @@
 <body>
     <div class="header">
         <div class="header-ribbon">
-            <img class="header-logo" src="logo.png" alt="Early Birds Logo">
+            <div class="header-logo-wrap" id="logo-wrap">
+                <img class="logo-eb" src="logo.png" alt="Early Birds Logo">
+                <img class="logo-ff" src="final-four-logo.svg" alt="Final Four Logo">
+            </div>
             <div class="header-center">
                 <div class="header-subtitle">March Madness 2026</div>
                 <div class="live-indicator" id="live-indicator">
@@ -527,9 +536,6 @@
                     <span>LIVE</span>
                 </div>
                 <div id="tournament-progress"></div>
-            </div>
-            <div class="header-right">
-                <img src="final-four-logo.svg" alt="Final Four Logo">
             </div>
         </div>
     </div>
@@ -1090,6 +1096,7 @@
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-' + tab).classList.add('active');
             btn.classList.add('active');
+            document.getElementById('logo-wrap').classList.toggle('show-ff', tab === 'results');
         }
 
         // ============== INIT ==============
