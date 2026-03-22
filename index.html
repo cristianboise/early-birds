@@ -802,7 +802,7 @@
                         const bottomScore = topCode === awayCode ? parseInt(home.score) : parseInt(away.score);
                         const dateLabel = dateStr.substring(4,6) + '/' + dateStr.substring(6);
 
-                        if (statusName === 'STATUS_IN_PROGRESS' || statusName === 'STATUS_END_PERIOD') {
+                        if (statusName === 'STATUS_IN_PROGRESS' || statusName === 'STATUS_HALFTIME' || statusName === 'STATUS_END_PERIOD') {
                             liveGames[idx] = evt.status.type.shortDetail || 'Live';
                             GAME_DETAILS[idx] = [topScore, bottomScore, dateLabel];
                         } else if (statusName === 'STATUS_FINAL') {
