@@ -5,23 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Early Birds — March Madness 2026</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #0f1318;
+            --card-bg: #1a1f2e;
+            --card-border: #2a3040;
+            --text: #e8eaf0;
+            --text-muted: #8890a0;
+            --gold: #ffd700;
+            --green: #4caf50;
+            --red: #f44336;
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #0d1b2a 0%, #1b2838 100%);
-            color: #e2e8f0;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
             padding-bottom: 40px;
         }
 
         .header {
-            background: linear-gradient(135deg, #0a1628 0%, #162033 100%);
-            border-bottom: 2px solid #2563eb;
+            background: linear-gradient(180deg, #141822 0%, var(--bg) 100%);
+            border-bottom: 1px solid var(--card-border);
             padding: 20px;
             text-align: center;
             position: sticky;
@@ -31,124 +38,159 @@
 
         .header-logo {
             display: block;
-            width: 110px;
-            height: 110px;
-            margin: 0 auto 10px;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 8px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid #2563eb;
-            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+            border: 3px solid var(--gold);
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2);
         }
 
         .header .subtitle {
-            font-size: 1.1rem;
-            color: #60a5fa;
+            font-size: 1rem;
+            color: var(--text-muted);
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             letter-spacing: 0.5px;
         }
 
+        .live-indicator {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            justify-content: center;
+            margin-bottom: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #4ade80;
+        }
+
+        .live-indicator.visible { display: flex; }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
         #last-updated {
-            font-size: 0.85rem;
-            color: #94a3b8;
+            font-size: 0.8rem;
+            color: var(--text-muted);
             margin-bottom: 8px;
         }
 
         #tournament-progress {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             justify-content: center;
             flex-wrap: wrap;
             margin-top: 8px;
         }
 
-        .progress-pill {
-            background: #1e293b;
-            border: 1px solid #334155;
-            color: #94a3b8;
-            padding: 5px 12px;
+        .round-pill {
+            background: #2a3040;
+            border: 1px solid #3a4050;
+            color: var(--text-muted);
+            padding: 6px 14px;
             border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .progress-pill.completed {
-            background: #2563eb;
+        .round-pill.completed {
+            background: var(--green);
             color: #fff;
-            border-color: #2563eb;
+            border-color: var(--green);
+        }
+
+        .round-pill.active {
+            background: #e85d4a;
+            color: #fff;
+            border-color: #e85d4a;
+        }
+
+        .round-pill.upcoming {
+            background: #2a3040;
+            color: var(--text-muted);
+            border-color: #3a4050;
         }
 
         .container {
             max-width: 1200px;
-            margin: 25px auto;
+            margin: 20px auto;
             padding: 0 15px;
         }
 
         .tab-nav {
             display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #1e293b;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .tab-btn {
-            background: none;
-            border: none;
-            border-bottom: 3px solid transparent;
-            color: #94a3b8;
-            font-size: 1.05rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            font-size: 0.95rem;
             font-weight: 600;
-            padding: 12px 20px;
+            padding: 10px 20px;
             cursor: pointer;
             transition: all 0.3s ease;
+            border-radius: 8px;
         }
 
         .tab-btn:hover {
-            color: #60a5fa;
+            color: var(--text);
+            border-color: var(--gold);
         }
 
         .tab-btn.active {
-            color: #3b82f6;
-            border-bottom-color: #3b82f6;
+            background: var(--gold);
+            color: #000;
+            border-color: var(--gold);
         }
 
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Leader Card */
         .leader-card {
-            background: linear-gradient(135deg, #1e293b 0%, #253347 100%);
-            border: 2px solid #2563eb;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 12px;
             padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.12);
+            margin-bottom: 20px;
         }
 
         .leader-title {
-            font-size: 0.9rem;
-            color: #3b82f6;
+            font-size: 0.85rem;
+            color: var(--gold);
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .leader-name {
             font-size: 2.2rem;
             font-weight: 800;
-            color: #93c5fd;
-            margin-bottom: 8px;
+            color: var(--text);
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -157,31 +199,31 @@
         .leader-crown { font-size: 2.5rem; }
 
         .leader-stats {
-            font-size: 1.1rem;
-            color: #60a5fa;
+            font-size: 1rem;
+            color: var(--text-muted);
             font-weight: 600;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .ranking-list {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 10px;
+            gap: 8px;
         }
 
         .ranking-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px;
-            background: rgba(37, 99, 235, 0.06);
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.03);
             border-radius: 8px;
-            border-left: 3px solid #2563eb;
+            border-left: 3px solid var(--gold);
         }
 
         .ranking-rank {
             font-weight: 800;
-            color: #3b82f6;
+            color: var(--gold);
             min-width: 30px;
             font-size: 1.1rem;
         }
@@ -189,191 +231,259 @@
         .ranking-name {
             flex: 1;
             font-weight: 600;
-            color: #e2e8f0;
+            color: var(--text);
         }
 
         .ranking-pts {
-            color: #60a5fa;
+            color: var(--text-muted);
             font-weight: 700;
             font-size: 1rem;
         }
 
+        /* Standings Table */
         .standings-card {
-            background: linear-gradient(135deg, #1e293b 0%, #253347 100%);
-            border: 1px solid #334155;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 12px;
             padding: 20px;
             overflow-x: auto;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95rem;
-        }
-
-        thead { border-bottom: 2px solid #2563eb; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        thead { border-bottom: 2px solid var(--card-border); }
 
         th {
-            padding: 15px 10px;
+            padding: 12px 10px;
             text-align: left;
             font-weight: 700;
-            color: #3b82f6;
+            color: var(--gold);
             text-transform: uppercase;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             letter-spacing: 0.5px;
         }
 
         td {
-            padding: 15px 10px;
-            border-bottom: 1px solid #1e293b;
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        tr:hover { background-color: rgba(37, 99, 235, 0.05); }
+        tr:hover { background-color: rgba(255, 255, 255, 0.03); }
 
-        .player-name {
-            font-weight: 600;
-            color: #e2e8f0;
-            min-width: 120px;
-        }
+        .player-name { font-weight: 600; color: var(--text); min-width: 120px; }
 
         .pts-col, .max-col {
             font-weight: 700;
-            color: #93c5fd;
+            color: var(--text);
             text-align: center;
             min-width: 50px;
         }
 
         .round-col {
             text-align: center;
-            color: #94a3b8;
+            color: var(--text-muted);
             font-weight: 500;
             min-width: 40px;
         }
 
-        .round-col.correct { color: #34d399; font-weight: 700; }
-        .round-col.incorrect { color: #f87171; opacity: 0.6; }
-        .round-col.pending { color: #fbbf24; }
+        .round-col.correct { color: #4ade80; font-weight: 700; }
+        .round-col.incorrect { color: var(--red); opacity: 0.6; }
+        .round-col.pending { color: var(--gold); }
 
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
+        /* Game Results */
+        .results-container {}
 
         .region-card {
-            background: linear-gradient(135deg, #1e293b 0%, #253347 100%);
-            border: 1px solid #334155;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin-bottom: 16px;
+            overflow: hidden;
         }
 
-        .region-title {
-            font-size: 1.15rem;
+        .region-header {
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 4px solid;
+        }
+
+        .region-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .region-name {
+            font-size: 1.1rem;
             font-weight: 800;
-            color: #3b82f6;
-            margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .game-result {
-            background: rgba(37, 99, 235, 0.06);
-            border-left: 3px solid #2563eb;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 6px;
+        .games-count {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.06);
+            padding: 2px 8px;
+            border-radius: 10px;
         }
 
-        .game-result.live {
-            border-left-color: #fbbf24;
-            background: rgba(251, 191, 36, 0.08);
+        .seed-badge {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: rgba(244, 67, 54, 0.2);
+            color: var(--red);
+            font-weight: 600;
         }
 
-        .game-result.live::after {
-            content: ' \1F534 LIVE';
-            color: #fbbf24;
+        .round-subheader {
+            padding: 6px 18px;
+            font-size: 0.7rem;
             font-weight: 700;
-            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .game-result.upset { border-left-color: #34d399; }
-        .game-result.upset::before { content: '\1F4C8 '; margin-right: 4px; }
-
-        .game-teams {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 6px;
-            font-weight: 500;
-        }
-
-        .team-score {
-            display: flex;
-            gap: 8px;
+        .game-row {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            padding: 8px 18px;
             align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            gap: 12px;
         }
 
-        .team-name { color: #e2e8f0; flex: 1; }
-        .winner-team .team-name { color: #34d399; font-weight: 700; }
+        .game-row:hover { background: rgba(255, 255, 255, 0.02); }
 
-        .score {
-            color: #60a5fa;
+        .gt-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .gt-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .gt-seed {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            min-width: 16px;
+            text-align: center;
+        }
+
+        .gt-name { font-size: 0.9rem; }
+
+        .gw { font-weight: 700; color: #4ade80; }
+        .gl { color: var(--text-muted); }
+
+        .gt-score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            min-width: 50px;
+        }
+
+        .score-val {
+            font-size: 0.85rem;
             font-weight: 700;
-            min-width: 30px;
-            text-align: right;
+            color: var(--text);
         }
 
-        .game-date {
-            font-size: 0.8rem;
-            color: #64748b;
-            text-align: right;
+        .score-dash {
+            font-size: 0.6rem;
+            color: var(--text-muted);
         }
 
+        .game-badges {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            padding: 2px 18px 6px;
+        }
+
+        .upset-badge {
+            font-size: 0.6rem;
+            padding: 1px 6px;
+            border-radius: 4px;
+            background: rgba(244, 67, 54, 0.3);
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        .live-badge {
+            font-size: 0.6rem;
+            padding: 1px 6px;
+            border-radius: 4px;
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+            font-weight: 600;
+            animation: pulse 1.5s infinite;
+        }
+
+        .date-badge {
+            font-size: 0.6rem;
+            padding: 1px 6px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-muted);
+        }
+
+        /* Scoring Footer */
         .info-footer {
             max-width: 1200px;
-            margin: 40px auto;
-            padding: 20px 15px;
-            background: rgba(37, 99, 235, 0.05);
-            border: 1px solid #334155;
+            margin: 30px auto;
+            padding: 18px 15px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 8px;
             font-size: 0.9rem;
-            color: #94a3b8;
+            color: var(--text-muted);
             line-height: 1.6;
         }
 
         .scoring-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 8px;
             margin-top: 10px;
         }
 
         .score-item {
-            background: rgba(37, 99, 235, 0.1);
+            background: rgba(255, 255, 255, 0.04);
             padding: 10px;
             border-radius: 6px;
             text-align: center;
-            border: 1px solid #2563eb;
+            border: 1px solid var(--card-border);
         }
 
-        .score-round { color: #3b82f6; font-weight: 700; font-size: 0.9rem; }
-        .score-pts { color: #93c5fd; font-weight: 800; font-size: 1.2rem; }
+        .score-round { color: var(--text-muted); font-weight: 700; font-size: 0.8rem; }
+        .score-pts { color: var(--gold); font-weight: 800; font-size: 1.2rem; }
 
         @media (max-width: 768px) {
-            .header-logo { width: 90px; height: 90px; }
+            .header-logo { width: 80px; height: 80px; }
             .leader-name { font-size: 1.6rem; }
             .leader-card { padding: 15px; }
             table { font-size: 0.8rem; }
             th, td { padding: 10px 6px; }
-            .results-grid { grid-template-columns: 1fr; }
-            .tab-btn { padding: 10px 15px; font-size: 0.95rem; }
+            .tab-btn { padding: 8px 14px; font-size: 0.9rem; }
+            .game-row { padding: 8px 12px; gap: 8px; }
+            .region-header { padding: 12px; }
+            .round-subheader { padding: 6px 12px; }
         }
 
         @media (max-width: 480px) {
-            .header .subtitle { font-size: 0.95rem; }
-            .leader-name { font-size: 1.4rem; gap: 8px; }
+            .header .subtitle { font-size: 0.9rem; }
+            .leader-name { font-size: 1.3rem; gap: 8px; }
             .leader-crown { font-size: 1.8rem; }
             .standings-card { padding: 10px; }
             table { font-size: 0.7rem; }
@@ -386,6 +496,10 @@
     <div class="header">
         <img class="header-logo" src="logo.png" alt="Early Birds Logo">
         <div class="subtitle">March Madness 2026</div>
+        <div class="live-indicator" id="live-indicator">
+            <div class="live-dot"></div>
+            <span>LIVE</span>
+        </div>
         <div id="last-updated"></div>
         <div id="tournament-progress"></div>
     </div>
@@ -421,12 +535,12 @@
         </div>
 
         <div id="tab-results" class="tab-content">
-            <div id="results-grid" class="results-grid"></div>
+            <div id="results-container" class="results-container"></div>
         </div>
     </div>
 
     <div class="info-footer">
-        <div style="font-weight: 700; margin-bottom: 10px; color: #3b82f6;">Scoring System</div>
+        <div style="font-weight: 700; margin-bottom: 10px; color: var(--gold);">Scoring System</div>
         <div class="scoring-grid">
             <div class="score-item">
                 <div class="score-round">Round 1</div>
@@ -490,61 +604,84 @@
 
         const SCORING = {2:1,3:2,4:4,5:8,6:16,7:32};
         const ROUND_NAMES = {2:"Round 1",3:"Round 2",4:"Sweet 16",5:"Elite Eight",6:"Final Four",7:"Championship"};
-        const REGION_FULL = {"E":"EAST","S":"SOUTH","W":"WEST","M":"MIDWEST","F":"Final Four"};
+        const REGION_FULL = {"E":"EAST","S":"SOUTH","W":"WEST","M":"MIDWEST","F":"FINAL FOUR"};
+        const REGION_COLORS = {"E":"#4a90d9","S":"#50c878","W":"#e74c3c","M":"#f39c12","F":"#ffd700"};
 
         // ============== STATE ==============
         let liveGames = {};
 
         // ============== ESPN FUNCTIONS ==============
+        function advanceWinner(idx) {
+            const m = MATCHUPS[idx];
+            const winner = m[6];
+            if (!winner || winner === '') return;
+
+            const nextIdx = m[7];
+            if (nextIdx < 0 || nextIdx >= MATCHUPS.length) return;
+
+            const next = MATCHUPS[nextIdx];
+            // Find winner's seed
+            const winnerSeed = (m[2] === winner) ? m[3] : m[5];
+
+            // Determine if this feeds into slot 2 (top) or 4 (bottom) of the next matchup
+            // Even source indices go to top, odd go to bottom
+            if (next[2] === null || next[2] === '') {
+                next[2] = winner;
+                next[3] = winnerSeed;
+            } else if (next[4] === null || next[4] === '') {
+                next[4] = winner;
+                next[5] = winnerSeed;
+            }
+        }
+
         async function fetchLiveScores() {
             try {
-                // Check today and yesterday for tournament games
+                // Iterate ALL past tournament dates
                 const today = new Date();
-                const dates = [];
-                for (let d = 0; d <= 1; d++) {
-                    const dt = new Date(today);
-                    dt.setDate(dt.getDate() - d);
-                    const y = dt.getFullYear();
-                    const m = String(dt.getMonth() + 1).padStart(2, '0');
-                    const day = String(dt.getDate()).padStart(2, '0');
-                    const ds = `${y}${m}${day}`;
-                    if (TOURN_DATES.includes(ds)) dates.push(ds);
-                }
+                const todayStr = today.getFullYear() + String(today.getMonth()+1).padStart(2,'0') + String(today.getDate()).padStart(2,'0');
+                const datesToCheck = TOURN_DATES.filter(d => d <= todayStr);
 
-                for (const dateStr of dates) {
-                    const url = `https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=${dateStr}`;
+                for (const dateStr of datesToCheck) {
+                    const url = `https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=${dateStr}&groups=100`;
                     const resp = await fetch(url);
                     const data = await resp.json();
-                    if (data.events) {
-                        for (const evt of data.events) {
-                            const statusName = evt.status.type.name;
-                            if (statusName === 'STATUS_IN_PROGRESS' || statusName === 'STATUS_FINAL' || statusName === 'STATUS_END_PERIOD') {
-                                const comp = evt.competitions[0];
-                                const away = comp.competitors.find(c => c.homeAway === 'away');
-                                const home = comp.competitors.find(c => c.homeAway === 'home');
-                                if (!away || !home) continue;
-                                const awayCode = espnToApp(away.team.abbreviation);
-                                const homeCode = espnToApp(home.team.abbreviation);
-                                if (awayCode && homeCode) {
-                                    const idx = findMatchupIdx(awayCode, homeCode);
-                                    if (idx !== null) {
-                                        const isLive = statusName !== 'STATUS_FINAL';
-                                        liveGames[idx] = isLive;
-                                        GAME_DETAILS[idx] = [parseInt(home.score), parseInt(away.score), null];
+                    if (!data.events) continue;
 
-                                        // Advance winner for completed games
-                                        if (statusName === 'STATUS_FINAL') {
-                                            const homeScore = parseInt(home.score);
-                                            const awayScore = parseInt(away.score);
-                                            const winnerCode = homeScore > awayScore ? homeCode : awayCode;
-                                            if (!MATCHUPS[idx][6] || MATCHUPS[idx][6] === '') {
-                                                MATCHUPS[idx][6] = winnerCode;
-                                            }
-                                            liveGames[idx] = false;
-                                        }
-                                    }
+                    for (const evt of data.events) {
+                        const statusName = evt.status.type.name;
+                        const comp = evt.competitions[0];
+                        const away = comp.competitors.find(c => c.homeAway === 'away');
+                        const home = comp.competitors.find(c => c.homeAway === 'home');
+                        if (!away || !home) continue;
+
+                        const awayCode = espnToApp(away.team.abbreviation);
+                        const homeCode = espnToApp(home.team.abbreviation);
+                        if (!awayCode || !homeCode) continue;
+
+                        const idx = findMatchupIdx(awayCode, homeCode);
+                        if (idx === null) continue;
+
+                        if (statusName === 'STATUS_IN_PROGRESS' || statusName === 'STATUS_END_PERIOD') {
+                            liveGames[idx] = true;
+                            GAME_DETAILS[idx] = [parseInt(home.score), parseInt(away.score), dateStr.substring(4,6) + '/' + dateStr.substring(6)];
+                        } else if (statusName === 'STATUS_FINAL') {
+                            const homeScore = parseInt(home.score);
+                            const awayScore = parseInt(away.score);
+                            const winnerCode = homeScore > awayScore ? homeCode : awayCode;
+
+                            if (!MATCHUPS[idx][6] || MATCHUPS[idx][6] === '') {
+                                MATCHUPS[idx][6] = winnerCode;
+                                // Set winner seed
+                                if (MATCHUPS[idx][2] === winnerCode) {
+                                    // winner is top team, seed already correct
+                                } else {
+                                    // winner is bottom team, seed already correct
                                 }
+                                advanceWinner(idx);
                             }
+
+                            GAME_DETAILS[idx] = [homeScore, awayScore, dateStr.substring(4,6) + '/' + dateStr.substring(6)];
+                            liveGames[idx] = false;
                         }
                     }
                 }
@@ -561,11 +698,7 @@
         function findMatchupIdx(team1, team2) {
             for (let i = 0; i < MATCHUPS.length; i++) {
                 const m = MATCHUPS[i];
-                const t1 = m[2];
-                const t2 = m[4];
-                if ((t1 === team1 && t2 === team2) || (t1 === team2 && t2 === team1)) {
-                    return i;
-                }
+                if ((m[2] === team1 && m[4] === team2) || (m[2] === team2 && m[4] === team1)) return i;
             }
             return null;
         }
@@ -606,7 +739,7 @@
                 }
             }
 
-            // Compute MAX = maximum possible score (current pts + all remaining possible pts)
+            // Compute MAX
             for (const player in PICKS) {
                 let maxPossible = playerScores[player].pts;
                 for (let i = 0; i < MATCHUPS.length; i++) {
@@ -617,9 +750,7 @@
                     const winner = m[6];
                     const pick = PICKS[player][i];
                     if (!pick || pick === '') continue;
-                    // Already counted if winner matched
                     if (winner && winner !== '') continue;
-                    // Game not yet played - check if pick is still alive
                     if (isTeamAlive(pick)) {
                         maxPossible += scoreVal;
                     }
@@ -632,23 +763,16 @@
                 .sort((a, b) => b.pts - a.pts || b.max - a.max);
 
             sorted.forEach((s, idx) => { s.rank = idx + 1; });
-
             return sorted;
         }
 
         function isTeamAlive(team) {
-            // A team is alive if it hasn't lost any game
             for (const m of MATCHUPS) {
-                const t1 = m[2];
-                const t2 = m[4];
-                const winner = m[6];
+                const t1 = m[2]; const t2 = m[4]; const winner = m[6];
                 if (winner && winner !== '') {
-                    if ((t1 === team || t2 === team) && winner !== team) {
-                        return false; // team lost this game
-                    }
+                    if ((t1 === team || t2 === team) && winner !== team) return false;
                 }
             }
-            // Check if team is even in the tournament
             for (const m of MATCHUPS) {
                 if (m[2] === team || m[4] === team) return true;
             }
@@ -656,13 +780,20 @@
         }
 
         function getCompletedRounds() {
-            const rounds = new Set();
-            for (const m of MATCHUPS) {
-                if (m[6] && m[6] !== '') {
-                    rounds.add(m[0]);
-                }
+            const rc = {}, rd = {};
+            for (let i = 0; i < MATCHUPS.length; i++) {
+                const r = MATCHUPS[i][0];
+                rc[r] = (rc[r] || 0) + 1;
+                if (MATCHUPS[i][6] && MATCHUPS[i][6] !== '') rd[r] = (rd[r] || 0) + 1;
             }
-            return Array.from(rounds).sort((a, b) => a - b);
+            const s = {};
+            for (const r of [2, 3, 4, 5, 6, 7]) {
+                const t = rc[r] || 0, d = rd[r] || 0;
+                if (d === t && t > 0) s[r] = 'completed';
+                else if (d > 0) s[r] = 'active';
+                else s[r] = 'upcoming';
+            }
+            return s;
         }
 
         function getResultsByRegion() {
@@ -675,110 +806,106 @@
                 const m = MATCHUPS[i];
                 const round = m[0];
                 const region = m[1];
-                const t1 = m[2];
-                const t2 = m[4];
+                const topTeam = m[2];
+                const topSeed = m[3];
+                const bottomTeam = m[4];
+                const bottomSeed = m[5];
                 const winner = m[6];
 
                 if (!winner || winner === '') continue;
-                if (region === 'F' && (t1 === null || t2 === null)) continue;
+                if (region === 'F' && (topTeam === null || bottomTeam === null)) continue;
 
                 const detail = GAME_DETAILS[i] || [0, 0];
                 const isLive = liveGames[i] || false;
-                let score1 = 0, score2 = 0;
+                let topScore = 0, bottomScore = 0;
                 if (Array.isArray(detail) && detail.length >= 2) {
-                    score1 = detail[0];
-                    score2 = detail[1];
+                    topScore = detail[0];
+                    bottomScore = detail[1];
                 }
 
-                const loser = (t1 === winner) ? t2 : t1;
-                const loserScore = (t1 === winner) ? score2 : score1;
-                const winnerScore = (t1 === winner) ? score1 : score2;
-
-                const seed1 = m[3];
-                const seed2 = m[5];
-                const isUpset = (winner === t2 && seed2 > seed1) || (winner === t1 && seed1 > seed2);
-
+                const upset = winner === bottomTeam && bottomSeed > topSeed;
                 const dateStr = (Array.isArray(detail) && detail.length >= 3 && detail[2]) ? detail[2] : null;
 
                 regions[region].push({
-                    round, winner, loser, winnerScore, loserScore, isUpset, isLive, dateStr,
-                    matchupIdx: i
+                    idx: i, round, topTeam, topSeed, bottomTeam, bottomSeed,
+                    winner, upset, topScore, bottomScore, date: dateStr, live: isLive
                 });
             }
 
             for (const region in regions) {
-                regions[region].sort((a, b) => a.round - b.round);
+                regions[region].sort((a, b) => a.round - b.round || a.idx - b.idx);
             }
-
             return regions;
         }
 
         // ============== RENDERING ==============
         function renderResults() {
+            const rn = {"E":"EAST Region","S":"SOUTH Region","W":"WEST Region","M":"MIDWEST Region","F":"FINAL FOUR"};
+            const rc = {"E":"#4a90d9","S":"#50c878","W":"#e74c3c","M":"#f39c12","F":"#ffd700"};
             const resultsByRegion = getResultsByRegion();
-            const grid = document.getElementById('results-grid');
-            grid.innerHTML = '';
+            let html = '';
 
-            for (const region of ['E', 'S', 'W', 'M', 'F']) {
-                if (resultsByRegion[region].length === 0) continue;
+            for (const reg of ['E','S','W','M','F']) {
+                const games = resultsByRegion[reg];
+                if (games.length === 0) continue;
 
-                const card = document.createElement('div');
-                card.className = 'region-card';
+                const color = rc[reg];
+                const upsetCount = games.filter(g => g.upset).length;
 
-                const title = document.createElement('div');
-                title.className = 'region-title';
-                title.textContent = REGION_FULL[region];
-                card.appendChild(title);
+                html += '<div class="region-card">';
+                html += '<div class="region-header" style="border-left-color:' + color + '">';
+                html += '<div class="region-header-left">';
+                html += '<span class="region-name" style="color:' + color + '">' + rn[reg] + '</span>';
+                if (upsetCount > 0) {
+                    html += '<span class="seed-badge">' + upsetCount + ' upset' + (upsetCount > 1 ? 's' : '') + '</span>';
+                }
+                html += '</div>';
+                html += '</div>';
 
-                for (const result of resultsByRegion[region]) {
-                    const gameDiv = document.createElement('div');
-                    gameDiv.className = 'game-result';
-                    if (result.isLive) gameDiv.classList.add('live');
-                    if (result.isUpset) gameDiv.classList.add('upset');
-
-                    const teamsDiv = document.createElement('div');
-                    teamsDiv.className = 'game-teams';
-
-                    const winnerDiv = document.createElement('div');
-                    winnerDiv.className = 'team-score winner-team';
-                    const winnerSpan = document.createElement('span');
-                    winnerSpan.className = 'team-name';
-                    winnerSpan.textContent = TEAM_NAMES[result.winner] || result.winner;
-                    const winnerScoreSpan = document.createElement('span');
-                    winnerScoreSpan.className = 'score';
-                    winnerScoreSpan.textContent = result.winnerScore || '';
-                    winnerDiv.appendChild(winnerSpan);
-                    winnerDiv.appendChild(winnerScoreSpan);
-
-                    const loserDiv = document.createElement('div');
-                    loserDiv.className = 'team-score';
-                    const loserSpan = document.createElement('span');
-                    loserSpan.className = 'team-name';
-                    loserSpan.textContent = TEAM_NAMES[result.loser] || result.loser;
-                    const loserScoreSpan = document.createElement('span');
-                    loserScoreSpan.className = 'score';
-                    loserScoreSpan.textContent = result.loserScore || '';
-                    loserDiv.appendChild(loserSpan);
-                    loserDiv.appendChild(loserScoreSpan);
-
-                    teamsDiv.appendChild(winnerDiv);
-                    teamsDiv.appendChild(loserDiv);
-                    gameDiv.appendChild(teamsDiv);
-
-                    const dateDiv = document.createElement('div');
-                    dateDiv.className = 'game-date';
-                    if (result.dateStr) {
-                        dateDiv.textContent = result.dateStr;
-                    } else {
-                        dateDiv.textContent = ROUND_NAMES[result.round] || '';
+                let lastRound = 0;
+                for (const g of games) {
+                    if (g.round !== lastRound) {
+                        html += '<div class="round-subheader">' + (ROUND_NAMES[g.round] || 'Round ' + g.round) + '</div>';
+                        lastRound = g.round;
                     }
-                    gameDiv.appendChild(dateDiv);
 
-                    card.appendChild(gameDiv);
+                    const topName = TEAM_NAMES[g.topTeam] || g.topTeam;
+                    const botName = TEAM_NAMES[g.bottomTeam] || g.bottomTeam;
+                    const topWin = g.winner === g.topTeam;
+                    const botWin = g.winner === g.bottomTeam;
+
+                    html += '<div class="game-row">';
+
+                    // Left team (top) — seed in parens, then name, then inline UPSET badge if loser
+                    html += '<div class="gt-left">';
+                    html += '<span class="gt-seed">(' + (g.topSeed || '') + ')</span>';
+                    html += '<span class="gt-name ' + (topWin ? 'gw' : 'gl') + '">' + topName + '</span>';
+                    if (!topWin && g.upset) html += ' <span class="upset-badge">UPSET</span>';
+                    if (g.live) html += ' <span class="live-badge">LIVE</span>';
+                    html += '</div>';
+
+                    // Score
+                    html += '<div class="gt-score">';
+                    if (g.topScore || g.bottomScore) {
+                        html += '<span class="score-val">' + g.topScore + ' - ' + g.bottomScore + '</span>';
+                    } else {
+                        html += '<span class="score-dash">vs</span>';
+                    }
+                    html += '</div>';
+
+                    // Right team (bottom) — name, then seed in parens
+                    html += '<div class="gt-right">';
+                    html += '<span class="gt-name ' + (botWin ? 'gw' : 'gl') + '">' + botName + '</span>';
+                    html += '<span class="gt-seed">(' + (g.bottomSeed || '') + ')</span>';
+                    html += '</div>';
+
+                    html += '</div>';
                 }
 
-                grid.appendChild(card);
+                html += '</div>';
             }
+
+            document.getElementById('results-container').innerHTML = html;
         }
 
         function renderLeaderHeader() {
@@ -808,7 +935,7 @@
 
             const statsDiv = document.createElement('div');
             statsDiv.className = 'leader-stats';
-            statsDiv.textContent = `${leader.pts} points \u2022 Max possible: ${leader.max}`;
+            statsDiv.textContent = leader.pts + ' points \u2022 Max possible: ' + leader.max;
             card.appendChild(statsDiv);
 
             const rankingList = document.createElement('div');
@@ -821,7 +948,7 @@
 
                 const rankSpan = document.createElement('div');
                 rankSpan.className = 'ranking-rank';
-                rankSpan.textContent = `#${player.rank}`;
+                rankSpan.textContent = '#' + player.rank;
                 item.appendChild(rankSpan);
 
                 const ns = document.createElement('div');
@@ -831,7 +958,7 @@
 
                 const ptsSpan = document.createElement('div');
                 ptsSpan.className = 'ranking-pts';
-                ptsSpan.textContent = `${player.pts} pts`;
+                ptsSpan.textContent = player.pts + ' pts';
                 item.appendChild(ptsSpan);
 
                 rankingList.appendChild(item);
@@ -842,26 +969,36 @@
         }
 
         function updateTournamentProgress() {
-            const completed = getCompletedRounds();
+            const roundStatus = getCompletedRounds();
             const allRounds = [2, 3, 4, 5, 6, 7];
             const progDiv = document.getElementById('tournament-progress');
             progDiv.innerHTML = '';
 
             for (const round of allRounds) {
                 const pill = document.createElement('div');
-                pill.className = 'progress-pill';
-                if (completed.includes(round)) {
-                    pill.classList.add('completed');
-                }
+                pill.className = 'round-pill';
+                const status = roundStatus[round] || 'upcoming';
+                pill.classList.add(status);
                 pill.textContent = ROUND_NAMES[round];
                 progDiv.appendChild(pill);
+            }
+        }
+
+        function updateLiveIndicator() {
+            const liveCount = Object.values(liveGames).filter(v => v === true).length;
+            const indicator = document.getElementById('live-indicator');
+            if (liveCount > 0) {
+                indicator.classList.add('visible');
+                indicator.innerHTML = '<div class="live-dot"></div><span>LIVE \u2014 ' + liveCount + ' game' + (liveCount > 1 ? 's' : '') + ' in progress</span>';
+            } else {
+                indicator.classList.remove('visible');
             }
         }
 
         function updateLastUpdated() {
             const now = new Date();
             const fmt = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            document.getElementById('last-updated').textContent = `Last updated: ${fmt}`;
+            document.getElementById('last-updated').textContent = 'Last updated: ' + fmt;
         }
 
         function render() {
@@ -911,13 +1048,13 @@
 
             renderResults();
             updateTournamentProgress();
+            updateLiveIndicator();
         }
 
         function switchTab(tab, btn) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-
-            document.getElementById(`tab-${tab}`).classList.add('active');
+            document.getElementById('tab-' + tab).classList.add('active');
             btn.classList.add('active');
         }
 
