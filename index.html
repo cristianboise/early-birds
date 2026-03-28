@@ -705,21 +705,21 @@
         // ============== DATA ==============
         const MATCHUPS = [
             [2,"E","DUKE",1,"SIENA",16,"DUKE",8],[2,"E","OHIOST",8,"TCU",9,"TCU",8],[2,"E","STJOHN",5,"NIOWA",12,"STJOHN",9],[2,"E","KANSAS",4,"CALBPTST",13,"KANSAS",9],[2,"E","LVILLE",6,"SFLA",11,"LVILLE",10],[2,"E","MICHST",3,"NDAKST",14,"MICHST",10],[2,"E","UCLA",7,"UCF",10,"UCLA",11],[2,"E","UCONN",2,"FURMAN",15,"UCONN",11],
-            [3,"E","DUKE",1,"TCU",9,"DUKE",12],[3,"E","STJOHN",5,"KANSAS",4,"",12],[3,"E","LVILLE",6,"MICHST",3,"MICHST",13],[3,"E","UCLA",7,"UCONN",2,"",13],
-            [4,"E","DUKE",1,null,null,"",14],[4,"E","MICHST",3,null,null,"",14],[5,"E",null,null,null,null,"",60],
+            [3,"E","DUKE",1,"TCU",9,"DUKE",12],[3,"E","STJOHN",5,"KANSAS",4,"STJOHN",12],[3,"E","LVILLE",6,"MICHST",3,"MICHST",13],[3,"E","UCLA",7,"UCONN",2,"UCONN",13],
+            [4,"E","DUKE",1,"STJOHN",5,"DUKE",14],[4,"E","MICHST",3,"UCONN",2,"UCONN",14],[5,"E",null,null,null,null,"",60],
             [2,"S","FLA",1,"PVAM",16,"FLA",23],[2,"S","CLEM",8,"IOWA",9,"IOWA",23],[2,"S","VANDY",5,"MCNSE",12,"VANDY",24],[2,"S","NEB",4,"TROY",13,"NEB",24],[2,"S","UNC",6,"VCU",11,"VCU",25],[2,"S","ILL",3,"PENN",14,"ILL",25],[2,"S","MARYCA",7,"TEXAM",10,"TEXAM",26],[2,"S","HOU",2,"IDAHO",15,"HOU",26],
-            [3,"S","FLA",1,"IOWA",9,"",27],[3,"S","VANDY",5,"NEB",4,"",27],[3,"S","VCU",11,"ILL",3,"",28],[3,"S","TEXAM",10,"HOU",2,"",28],
-            [4,"S",null,null,null,null,"",29],[4,"S",null,null,null,null,"",29],[5,"S",null,null,null,null,"",60],
+            [3,"S","FLA",1,"IOWA",9,"IOWA",27],[3,"S","VANDY",5,"NEB",4,"NEB",27],[3,"S","VCU",11,"ILL",3,"ILL",28],[3,"S","TEXAM",10,"HOU",2,"HOU",28],
+            [4,"S","IOWA",9,"NEB",4,"IOWA",29],[4,"S","ILL",3,"HOU",2,"ILL",29],[5,"S",null,null,null,null,"",60],
             [2,"W","ARIZ",1,"LIU",16,"ARIZ",38],[2,"W","NOVA",8,"UTAHST",9,"UTAHST",38],[2,"W","WISC",5,"HIGHPT",12,"HIGHPT",39],[2,"W","ARK",4,"HAWAII",13,"ARK",39],[2,"W","BYU",6,"TEXAS",11,"TEXAS",40],[2,"W","GONZAG",3,"KENSAW",14,"GONZAG",40],[2,"W","MIAMI",7,"MIZZOU",10,"MIAMI",41],[2,"W","PURDUE",2,"QUEENC",15,"PURDUE",41],
-            [3,"W","ARIZ",1,"UTAHST",9,"",42],[3,"W","HIGHPT",12,"ARK",4,"",42],[3,"W","TEXAS",11,"GONZAG",3,"",43],[3,"W","MIAMI",7,"PURDUE",2,"",43],
-            [4,"W",null,null,null,null,"",44],[4,"W",null,null,null,null,"",44],[5,"W",null,null,null,null,"",61],
+            [3,"W","ARIZ",1,"UTAHST",9,"ARIZ",42],[3,"W","HIGHPT",12,"ARK",4,"ARK",42],[3,"W","TEXAS",11,"GONZAG",3,"TEXAS",43],[3,"W","MIAMI",7,"PURDUE",2,"PURDUE",43],
+            [4,"W","ARIZ",1,"ARK",4,"ARIZ",44],[4,"W","TEXAS",11,"PURDUE",2,"PURDUE",44],[5,"W",null,null,null,null,"",61],
             [2,"M","MICH",1,"HOW",16,"MICH",53],[2,"M","UGA",8,"STLOU",9,"STLOU",53],[2,"M","TXTECH",5,"AKRON",12,"TXTECH",54],[2,"M","BAMA",4,"HOFSTRA",13,"BAMA",54],[2,"M","TENN",6,"MIAOH",11,"TENN",55],[2,"M","UVA",3,"WRIGHT",14,"UVA",55],[2,"M","UK",7,"SNCLRA",10,"UK",56],[2,"M","IOWAST",2,"TNST",15,"IOWAST",56],
-            [3,"M","MICH",1,"STLOU",9,"MICH",57],[3,"M","TXTECH",5,"BAMA",4,"",57],[3,"M","TENN",6,"UVA",3,"",58],[3,"M","UK",7,"IOWAST",2,"",58],
-            [4,"M","MICH",1,null,null,"",59],[4,"M",null,null,null,null,"",59],[5,"M",null,null,null,null,"",61],
+            [3,"M","MICH",1,"STLOU",9,"MICH",57],[3,"M","TXTECH",5,"BAMA",4,"BAMA",57],[3,"M","TENN",6,"UVA",3,"TENN",58],[3,"M","UK",7,"IOWAST",2,"IOWAST",58],
+            [4,"M","MICH",1,"BAMA",4,"MICH",59],[4,"M","TENN",6,"IOWAST",2,"TENN",59],[5,"M",null,null,null,null,"",61],
             [6,"F",null,null,null,null,"",62],[6,"F",null,null,null,null,"",62],[7,"F",null,null,null,null,"",-1]
         ];
 
-        const GAME_DETAILS = {0:[71,65,"3/19"],1:[64,66,"3/19"],2:[79,53,"3/20"],3:[68,60,"3/20"],4:[83,79,"3/19"],5:[92,67,"3/19"],6:[75,71,"3/20"],7:[82,71,"3/20"],8:[81,58,"3/21"],10:[69,77,"3/21"],15:[114,55,"3/20"],16:[61,67,"3/20"],17:[78,68,"3/19"],18:[76,47,"3/19"],19:[78,82,"3/19"],20:[105,70,"3/19"],21:[50,63,"3/19"],22:[78,47,"3/19"],30:[92,58,"3/20"],31:[76,86,"3/20"],32:[82,83,"3/19"],33:[97,78,"3/19"],34:[71,79,"3/19"],35:[73,64,"3/19"],36:[80,66,"3/20"],37:[104,71,"3/20"],45:[101,80,"3/20"],46:[77,102,"3/20"],47:[91,71,"3/20"],48:[90,70,"3/20"],49:[78,56,"3/20"],50:[82,73,"3/20"],51:[89,84,"3/20"],52:[108,74,"3/20"],53:[95,72,"3/21"]};
+        const GAME_DETAILS = {0:[71,65,"3/19"],1:[64,66,"3/19"],2:[79,53,"3/20"],3:[68,60,"3/20"],4:[83,79,"3/19"],5:[92,67,"3/19"],6:[75,71,"3/20"],7:[82,71,"3/20"],8:[81,58,"3/21"],9:[67,65,"3/22"],10:[69,77,"3/21"],11:[57,73,"3/22"],12:[80,75,"3/27"],13:[63,67,"3/27"],15:[114,55,"3/20"],16:[61,67,"3/20"],17:[78,68,"3/19"],18:[76,47,"3/19"],19:[78,82,"3/19"],20:[105,70,"3/19"],21:[50,63,"3/19"],22:[78,47,"3/19"],23:[72,73,"3/22"],24:[72,74,"3/21"],25:[55,76,"3/21"],26:[57,88,"3/21"],27:[77,71,"3/26"],28:[65,55,"3/26"],30:[92,58,"3/20"],31:[76,86,"3/20"],32:[82,83,"3/19"],33:[97,78,"3/19"],34:[71,79,"3/19"],35:[73,64,"3/19"],36:[80,66,"3/20"],37:[104,71,"3/20"],38:[78,66,"3/22"],39:[88,94,"3/21"],40:[74,68,"3/21"],41:[69,79,"3/22"],42:[109,88,"3/26"],43:[77,79,"3/26"],45:[101,80,"3/20"],46:[77,102,"3/20"],47:[91,71,"3/20"],48:[90,70,"3/20"],49:[78,56,"3/20"],50:[82,73,"3/20"],51:[89,84,"3/20"],52:[108,74,"3/20"],53:[95,72,"3/21"],54:[65,90,"3/22"],55:[79,72,"3/22"],56:[63,82,"3/22"],57:[90,77,"3/27"],58:[76,62,"3/27"]};
 
         const PICKS = {
             "Cristian Boise":["DUKE","OHIOST","STJOHN","KANSAS","LVILLE","MICHST","UCLA","UCONN","DUKE","STJOHN","MICHST","UCONN","DUKE","UCONN","DUKE","FLA","IOWA","VANDY","NEB","VCU","ILL","TEXAM","HOU","FLA","VANDY","ILL","HOU","FLA","HOU","HOU","ARIZ","NOVA","WISC","ARK","BYU","GONZAG","MIAMI","PURDUE","ARIZ","ARK","GONZAG","PURDUE","ARIZ","PURDUE","ARIZ","MICH","STLOU","TXTECH","BAMA","TENN","UVA","UK","IOWAST","MICH","BAMA","UVA","IOWAST","MICH","IOWAST","MICH","HOU","ARIZ","ARIZ"],
@@ -748,6 +748,10 @@
 
         // ============== STATE ==============
         let liveGames = {};
+        const completedDates = new Set();
+        let pollInterval = null;
+        const POLL_LIVE = 60000;      // 1 minute when games are live
+        const POLL_IDLE = 300000;     // 5 minutes when no games are live
 
         // ============== ESPN FUNCTIONS ==============
         function advanceWinner(idx) {
@@ -770,18 +774,34 @@
             }
         }
 
+        function getDatesToCheck() {
+            const today = new Date();
+            const todayStr = today.getFullYear() + String(today.getMonth()+1).padStart(2,'0') + String(today.getDate()).padStart(2,'0');
+            const pastDates = TOURN_DATES.filter(d => d <= todayStr);
+            if (pastDates.length === 0) return [];
+
+            // Only check today and the most recent prior game day (for late-finishing games)
+            const todayDate = pastDates[pastDates.length - 1];
+            const prevDate = pastDates.length >= 2 ? pastDates[pastDates.length - 2] : null;
+            const dates = [todayDate];
+            if (prevDate) dates.unshift(prevDate);
+
+            // Skip dates already confirmed complete
+            return dates.filter(d => !completedDates.has(d));
+        }
+
         async function fetchLiveScores() {
             try {
-                // Iterate ALL past tournament dates
-                const today = new Date();
-                const todayStr = today.getFullYear() + String(today.getMonth()+1).padStart(2,'0') + String(today.getDate()).padStart(2,'0');
-                const datesToCheck = TOURN_DATES.filter(d => d <= todayStr);
+                const datesToCheck = getDatesToCheck();
 
                 for (const dateStr of datesToCheck) {
                     const url = `https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=${dateStr}&groups=100`;
                     const resp = await fetch(url);
                     const data = await resp.json();
                     if (!data.events) continue;
+
+                    let allFinal = true;
+                    let hasGames = false;
 
                     for (const evt of data.events) {
                         const statusName = evt.status.type.name;
@@ -797,6 +817,7 @@
                         const idx = findMatchupIdx(awayCode, homeCode);
                         if (idx === null) continue;
 
+                        hasGames = true;
                         const topCode = MATCHUPS[idx][2];
                         const topScore = topCode === awayCode ? parseInt(away.score) : parseInt(home.score);
                         const bottomScore = topCode === awayCode ? parseInt(home.score) : parseInt(away.score);
@@ -805,6 +826,7 @@
                         if (statusName === 'STATUS_IN_PROGRESS' || statusName === 'STATUS_HALFTIME' || statusName === 'STATUS_END_PERIOD') {
                             liveGames[idx] = evt.status.type.shortDetail || 'Live';
                             GAME_DETAILS[idx] = [topScore, bottomScore, dateLabel];
+                            allFinal = false;
                         } else if (statusName === 'STATUS_FINAL') {
                             const winnerCode = topScore > bottomScore ? topCode : MATCHUPS[idx][4];
 
@@ -815,8 +837,24 @@
 
                             GAME_DETAILS[idx] = [topScore, bottomScore, dateLabel];
                             liveGames[idx] = false;
+                        } else {
+                            allFinal = false;
                         }
                     }
+
+                    // Mark date as complete so we never fetch it again
+                    if (hasGames && allFinal) {
+                        completedDates.add(dateStr);
+                    }
+                }
+
+                // Adjust polling interval based on whether any games are live
+                const hasLive = Object.values(liveGames).some(v => v);
+                const desiredInterval = hasLive ? POLL_LIVE : POLL_IDLE;
+                if (pollInterval && pollInterval._interval !== desiredInterval) {
+                    clearInterval(pollInterval);
+                    pollInterval = setInterval(updateLiveScores, desiredInterval);
+                    pollInterval._interval = desiredInterval;
                 }
             } catch (err) {
                 console.log('ESPN fetch error:', err);
@@ -1252,7 +1290,8 @@
         render();
         updateLastUpdated();
         updateLiveScores();
-        setInterval(updateLiveScores, 60000);
+        pollInterval = setInterval(updateLiveScores, POLL_IDLE);
+        pollInterval._interval = POLL_IDLE;
     </script>
 </body>
 </html>
