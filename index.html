@@ -550,6 +550,144 @@
             color: var(--text-muted);
         }
 
+        /* Player Picks Modal */
+        .picks-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            background: var(--bg);
+            overflow-y: auto;
+        }
+
+        .picks-modal.open { display: block; }
+
+        .picks-modal-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: var(--bg);
+            text-align: center;
+            padding: 20px 16px 14px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .picks-modal-name {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        .picks-modal-stats {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .picks-stat-pill {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .picks-round-section {
+            max-width: 700px;
+            margin: 16px auto;
+            padding: 0 15px;
+        }
+
+        .picks-round-header {
+            background: #2d3a52;
+            padding: 12px 18px;
+            border-radius: 10px 10px 0 0;
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .picks-region-header {
+            padding: 8px 18px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .picks-region-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .picks-game-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 10px 18px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            background: var(--card-bg);
+        }
+
+        .picks-game-row:last-child {
+            border-radius: 0 0 10px 10px;
+        }
+
+        .picks-game-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .picks-game-label strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .picks-game-pick {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .picks-game-pick .pick-value {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .picks-game-pick .pick-sub {
+            font-size: 0.7rem;
+            margin-top: 2px;
+        }
+
+        .picks-back-btn {
+            background: #2d3a52;
+            color: var(--text);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .picks-back-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
         /* Scoring Footer */
         .info-footer {
             max-width: 1200px;
@@ -692,6 +830,8 @@
     </div>
 
     <div id="last-updated"></div>
+
+    <div class="picks-modal" id="picks-modal"></div>
 
     <div class="bracket-modal" id="bracket-modal">
         <div class="bracket-modal-header">
@@ -1131,9 +1271,7 @@
             const nameSpan = document.createElement('span');
             nameSpan.textContent = leader.name;
             nameSpan.className = 'bracket-link';
-            if (BRACKET_FILES[leader.name]) {
-                nameSpan.onclick = function() { openBracket(leader.name); };
-            }
+            nameSpan.onclick = function() { showPlayerPicks(leader.name); };
             nameDiv.appendChild(nameSpan);
             card.appendChild(nameDiv);
 
@@ -1158,9 +1296,7 @@
                 const ns = document.createElement('div');
                 ns.className = 'ranking-name bracket-link';
                 ns.textContent = player.name;
-                if (BRACKET_FILES[player.name]) {
-                    ns.onclick = function() { openBracket(player.name); };
-                }
+                ns.onclick = (function(n) { return function() { showPlayerPicks(n); }; })(player.name);
                 item.appendChild(ns);
 
                 const ptsSpan = document.createElement('div');
@@ -1272,6 +1408,94 @@
         function closeBracket() {
             document.getElementById('bracket-modal').classList.remove('open');
             document.getElementById('bracket-modal-iframe').src = '';
+        }
+
+        function showPlayerPicks(name) {
+            const picks = PICKS[name];
+            if (!picks) return;
+
+            const scores = computeScores();
+            const player = scores.find(s => s.name === name);
+            const modal = document.getElementById('picks-modal');
+
+            let html = '<div class="picks-modal-header">';
+            html += '<div class="picks-modal-name">' + name + '</div>';
+            html += '<div class="picks-modal-stats">';
+            html += '<span class="picks-stat-pill">Total Score: ' + player.pts + '</span>';
+            html += '<span class="picks-stat-pill">Max Possible: ' + player.max + '</span>';
+            html += '<button class="picks-back-btn" onclick="closePlayerPicks()">\u2190 Back to Player Standings</button>';
+            html += '</div></div>';
+
+            const rounds = [2, 3, 4, 5, 6, 7];
+            const regions = ['E', 'S', 'W', 'M', 'F'];
+            let gameNum = 1;
+
+            for (const round of rounds) {
+                const roundGames = [];
+                for (let i = 0; i < MATCHUPS.length; i++) {
+                    if (MATCHUPS[i][0] === round) roundGames.push(i);
+                }
+                if (roundGames.length === 0) continue;
+
+                const pts = SCORING[round] || 0;
+                html += '<div class="picks-round-section">';
+                html += '<div class="picks-round-header">' + ROUND_NAMES[round] + ' (' + pts + ' Pt' + (pts !== 1 ? 's' : '') + ')</div>';
+
+                let lastRegion = '';
+                for (const idx of roundGames) {
+                    const m = MATCHUPS[idx];
+                    const region = m[1];
+
+                    if (region !== lastRegion) {
+                        const regName = REGION_FULL[region] || region;
+                        const regColor = REGION_COLORS[region] || '#888';
+                        html += '<div class="picks-region-header" style="background:' + regColor + '15; color:' + regColor + '">';
+                        html += '<span class="picks-region-dot" style="background:' + regColor + '"></span>';
+                        html += regName + ' Region</div>';
+                        lastRegion = region;
+                    }
+
+                    const topTeam = m[2];
+                    const bottomTeam = m[4];
+                    const winner = m[6];
+                    const pick = picks[idx];
+                    const hasWinner = winner && winner !== '';
+                    const topName = TEAM_NAMES[topTeam] || topTeam || '???';
+                    const bottomName = TEAM_NAMES[bottomTeam] || bottomTeam || '???';
+                    const pickName = TEAM_NAMES[pick] || pick || '???';
+
+                    html += '<div class="picks-game-row">';
+                    html += '<div class="picks-game-label"><span style="color:var(--text-muted)">Game ' + gameNum + ':</span> <strong>' + topName + ' vs ' + bottomName + '</strong></div>';
+                    html += '<div class="picks-game-pick">';
+
+                    if (hasWinner && pick === winner) {
+                        html += '<div class="pick-value" style="color:var(--green)">\u2705 ' + pickName + ' <span style="color:var(--gold);margin-left:6px">+' + pts + '</span></div>';
+                    } else if (hasWinner && pick !== winner) {
+                        const actualName = TEAM_NAMES[winner] || winner;
+                        html += '<div class="pick-value" style="color:var(--red)">\u274C ' + pickName + ' <span style="color:var(--gold);margin-left:6px">0</span></div>';
+                        html += '<div class="pick-sub" style="color:var(--text-muted)">Actual: ' + actualName + '</div>';
+                    } else if (!hasWinner && pick && !isTeamAlive(pick)) {
+                        html += '<div class="pick-value" style="color:var(--red)">\u274C ' + pickName + ' <span style="color:var(--gold);margin-left:6px">0</span></div>';
+                        html += '<div class="pick-sub" style="color:var(--red)">Team Eliminated</div>';
+                    } else {
+                        html += '<div class="pick-value" style="color:var(--text)">' + pickName + '</div>';
+                    }
+
+                    html += '</div></div>';
+                    gameNum++;
+                }
+
+                html += '</div>';
+            }
+
+
+            modal.innerHTML = html;
+            modal.classList.add('open');
+            modal.scrollTop = 0;
+        }
+
+        function closePlayerPicks() {
+            document.getElementById('picks-modal').classList.remove('open');
         }
 
         function togglePicks(idx) {
