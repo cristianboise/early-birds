@@ -1428,8 +1428,6 @@
 
             const rounds = [2, 3, 4, 5, 6, 7];
             const regions = ['E', 'S', 'W', 'M', 'F'];
-            let gameNum = 1;
-
             for (const round of rounds) {
                 const roundGames = [];
                 for (let i = 0; i < MATCHUPS.length; i++) {
@@ -1465,7 +1463,7 @@
                     const pickName = TEAM_NAMES[pick] || pick || '???';
 
                     html += '<div class="picks-game-row">';
-                    html += '<div class="picks-game-label"><span style="color:var(--text-muted)">Game ' + gameNum + ':</span> <strong>' + topName + ' vs ' + bottomName + '</strong></div>';
+                    html += '<div class="picks-game-label"><strong>' + topName + ' vs ' + bottomName + '</strong></div>';
                     html += '<div class="picks-game-pick">';
 
                     if (hasWinner && pick === winner) {
@@ -1482,7 +1480,6 @@
                     }
 
                     html += '</div></div>';
-                    gameNum++;
                 }
 
                 html += '</div>';
